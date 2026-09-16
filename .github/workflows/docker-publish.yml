@@ -18,6 +18,18 @@ jobs:
       - name: Run Docker Container
         run: docker run -d -p 8080:80 --name test-app my-html-app
 
+      # ⏰ خطوة جديدة: انتظر 5 ثواني عشان الـ Nginx يجهز
+      - name: Wait for container to start
+        run: sleep 5
+
+      # 🔍 خطوة جديدة: شوف الـ Container شغال ولا لأ
+      - name: Check container status
+        run: docker ps -a
+
+      # 📋 خطوة جديدة: شوف Logs الـ Container
+      - name: Show container logs
+        run: docker logs test-app
+
       - name: Test Application
         run: curl -f http://localhost:8080
 

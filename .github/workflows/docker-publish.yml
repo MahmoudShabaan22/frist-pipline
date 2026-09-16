@@ -1,11 +1,12 @@
-name: HTML Docker CI Pipeline
+name: HTML Docker CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
+
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,20 +19,19 @@ jobs:
       - name: Run Docker Container
         run: docker run -d -p 8080:80 --name test-app my-html-app
 
-      # ⏰ خطوة جديدة: انتظر 5 ثواني عشان الـ Nginx يجهز
-      - name: Wait for container to start
+      - name: Wait for container
         run: sleep 5
-
-      # 🔍 خطوة جديدة: شوف الـ Container شغال ولا لأ
-      - name: Check container status
-        run: docker ps -a
-
-      # 📋 خطوة جديدة: شوف Logs الـ Container
-      - name: Show container logs
-        run: docker logs test-app
 
       - name: Test Application
         run: curl -f http://localhost:8080
+
+      # 🚀 الخطوة الجديدة: نشر على GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
 
       - name: Cleanup
         if: always()

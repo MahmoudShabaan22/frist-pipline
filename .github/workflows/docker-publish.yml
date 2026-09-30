@@ -20,6 +20,7 @@ jobs:
 
         
       - name: run code in ubuntu 
+        runs-on: ubuntu-latest
         run: ls
 
 
